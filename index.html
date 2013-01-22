@@ -343,28 +343,30 @@
     <script src="js/app.js"></script>
     <script src="js/app.charts.js"></script>
     <script>
+    //alert('Load Remote Web Inspector now... ' + navigator.userAgent);
+
     // add load events
-    if (navigator.userAgent.match(/BB10/)) {
+    if (navigator.userAgent.match(/WebWorks/)) {
         window.addEventListener('DOMContentLoaded', function() {
             document.addEventListener('webworksready', app.init);
         }, false);
 
         window.addEventListener('orientationchange', function () {
-            //alert(window.orientation);
             app.adjustCarousels();
-            app.refreshScrollers();
+            //app.refreshScrollers();
         }, false);
     }
     else {
         window.addEventListener('DOMContentLoaded', app.init);
 
         var resizeTimeout;
-        window.onresize = function() {
+        window.addEventListener('resize', function() {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function() {
                 app.adjustCarousels();
+                //app.refreshScrollers();
             }, 1000);
-        };
+        }, false);
     }
     </script>
 </body>

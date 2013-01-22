@@ -352,15 +352,17 @@ app.init = function () {
 */
 
     // Access properties and initialize events in WebWorks
-    if (window.blackberry && blackberry.app) {
-        if (document.getElementById('heading')) {
+    if (window.blackberry) {
+        if (document.getElementById('heading') && blackberry.app) {
             document.getElementById('heading').innerHTML = blackberry.app.name + ' ' + blackberry.app.version;
         }
         // Add bezel swipe down event
         if (blackberry.app && blackberry.app.event && blackberry.app.event.onSwipeDown) {
             blackberry.app.event.onSwipeDown(app.toggle); // PlayBook
         }
-        blackberry.event.addEventListener("swipedown", app.toggle); // BB10
+        else if (blackberry.event && blackberry.event.addEventListener) {
+            blackberry.event.addEventListener("swipedown", app.toggle); // BB10
+        }
     }
 
     // Add click listeners
