@@ -353,6 +353,9 @@ app.init = function () {
 
     // Access properties and initialize events in WebWorks
     if (window.blackberry && blackberry.app) {
+        if (document.getElementById('heading')) {
+            document.getElementById('heading').innerHTML = blackberry.app.name + ' ' + blackberry.app.version;
+        }
         // Add bezel swipe down event
         if (blackberry.app && blackberry.app.event && blackberry.app.event.onSwipeDown) {
             blackberry.app.event.onSwipeDown(app.toggle); // PlayBook
@@ -371,7 +374,6 @@ app.init = function () {
     // Add event delegation for all Application Menu items
     appMenu.addEventListener('click', function (ev) {
         console.log(ev.target.dataset.id, ev.target.innerText);
-        //app.update(ev.target.innerText);
         this.style.display = 'none';
     }, false);
 
@@ -392,8 +394,6 @@ app.init = function () {
     sidebarMenu.addEventListener('click', function (ev) {
         console.log(ev, ev.target.dataset.id, ev.target.innerText, sidebarMenu.children[0].children);
 
-        //app.update(ev.target.innerText);
-
         // Get list of tab IDs and hide all tabs
         var listId, tabElem;
         for (var i = 0, ii = sidebarMenu.children[0].children.length; i < ii; i++) {
@@ -409,6 +409,8 @@ app.init = function () {
 
         app.adjustCarousels();
 
+        app.refreshScrollers();
+
         // Hide Sidebar Menu
         this.style.display = 'none';
         document.getElementById('main').style.left = '0';
@@ -418,7 +420,6 @@ app.init = function () {
     actionButtons.addEventListener('click', function (ev) {
         ev.stopPropagation();
         console.log(ev.target.dataset.id, ev.target.innerText);
-        //app.update(ev.target.innerText);
     }, false);
 
     // Add button toggle for Action Menu
@@ -430,7 +431,6 @@ app.init = function () {
     // Add event delegation for all Action Menu items
     actionMenu.addEventListener('click', function (ev) {
         console.log(ev.target.dataset.id, ev.target.innerText);
-        //app.update(ev.target.innerText);
 
         this.style.display = 'none';
     }, false);
@@ -449,7 +449,6 @@ app.init = function () {
 
     app.debug(navigator.userAgent);
     app.debug('devicePixelRatio=' + window.devicePixelRatio);
-    //app.debug('initialScale=' + initialScale);
 
     // Enable visibility AFTER setting up the carousels to reduce flicker
     $('body').css('visibility', 'visible');
@@ -540,9 +539,9 @@ app.maximize = function (ev, idx, carouselId) {
         // Hide all carousels
         document.getElementById('container0').style.visibility = 'hidden';
         document.getElementById('container1').style.visibility = 'hidden';
-        // document.getElementById('container2').style.visibility = 'hidden';
-        // document.getElementById('container3').style.visibility = 'hidden';
-        // document.getElementById('container4').style.visibility = 'hidden';
+        document.getElementById('container2').style.visibility = 'hidden';
+        document.getElementById('container3').style.visibility = 'hidden';
+        document.getElementById('container4').style.visibility = 'hidden';
 
         // Maximize selected carousel
         document.getElementById(cids[cid]).style.top = '0';
@@ -569,9 +568,9 @@ app.maximize = function (ev, idx, carouselId) {
         // Unhide all carousels
         document.getElementById('container0').style.visibility = 'visible';
         document.getElementById('container1').style.visibility = 'visible';
-        // document.getElementById('container2').style.visibility = 'visible';
-        // document.getElementById('container3').style.visibility = 'visible';
-        // document.getElementById('container4').style.visibility = 'visible';
+        document.getElementById('container2').style.visibility = 'visible';
+        document.getElementById('container3').style.visibility = 'visible';
+        document.getElementById('container4').style.visibility = 'visible';
 
         app.carousels[cid].maximized = false;
     }
@@ -623,6 +622,13 @@ app.maximize = function (ev, idx, carouselId) {
             console.log(chart);
             chart.redraw(this); // TODO:
         }
+    }
+};
+
+app.refreshScrollers = function () {
+    for (var i in app.scrollers) {
+        //console.log(app.scrollers[i]);
+        app.scrollers[i].refresh();
     }
 };
 

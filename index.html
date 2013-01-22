@@ -344,9 +344,15 @@
     <script src="js/app.charts.js"></script>
     <script>
     // add load events
-    if (window.blackberry && navigator.userAgent.match(/BB10/)) {
-        window.addEventListener('DOMContentLoaded', function(e) {
+    if (navigator.userAgent.match(/BB10/)) {
+        window.addEventListener('DOMContentLoaded', function() {
             document.addEventListener('webworksready', app.init);
+        }, false);
+
+        window.addEventListener('orientationchange', function () {
+            //alert(window.orientation);
+            app.adjustCarousels();
+            app.refreshScrollers();
         }, false);
     }
     else {
