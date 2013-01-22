@@ -420,6 +420,7 @@ app.init = function () {
     actionButtons.addEventListener('click', function (ev) {
         ev.stopPropagation();
         console.log(ev.target.dataset.id, ev.target.innerText);
+        app.turnCarousel('content', ev.target.dataset.id);
     }, false);
 
     // Add button toggle for Action Menu
@@ -644,14 +645,25 @@ app.toggle = function () {
 };
 
 app.turnCarousel = function (carouselId, side) {
+    if (!app.carousels[carouselId]) {
+        return;
+    }
+
+    var angle = 360 / app.carousels[carouselId].panelCount;
+/*
     var rotation = {
         1: 0,
         2: -90,
         3: -180,
         4: 90
     };
+*/
+    var rotation = -(angle * side - angle);
+    console.info('turnCarousel', carouselId, side, angle, rotation);
+    //console.log(app.carousels[carouselId]);
 
-    app.carousels[carouselId].rotation = rotation[side];
+    //app.carousels[carouselId].rotation = rotation[side];
+    app.carousels[carouselId].rotation = rotation;
     app.carousels[carouselId].transform();
 };
 
